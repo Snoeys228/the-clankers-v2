@@ -1,0 +1,54 @@
+{
+  "company": "Clankers Inc.",
+  "exported_at": "2026-09-30T09:00:00Z",
+  "updates": [
+    {
+      "id": "hr-2026-041",
+      "source": "slack#people-ops",
+      "author": "Dana Whitfield (People Ops)",
+      "date": "2026-09-22",
+      "target_page": "Remote Work Policy",
+      "content": "heads up all - starting Oct 15 we're moving from 2 required office days to 'anchor days': Tue + Thu for everyone in the Berlin + Austin hubs. fully remote folks are unaffected. home office stipend going up from $500 to $750/yr, claim thru Expensify under 'Remote Setup'. managers pls confirm your team's anchor days by Oct 8"
+    },
+    {
+      "id": "hr-2026-044",
+      "source": "email",
+      "author": "Dana Whitfield (People Ops)",
+      "date": "2026-09-27",
+      "target_page": "Remote Work Policy",
+      "content": "Correction to last week's note: the stipend increase applies to full-time employees only; contractors keep the current $500. Also, working from abroad is allowed up to 30 days/year without approval (was 14). Anything longer needs a request in Workday at least 3 weeks in advance for tax review."
+    },
+    {
+      "id": "eng-2026-112",
+      "source": "confluence-export",
+      "author": "Priya Raman (Platform Eng)",
+      "date": "2026-09-18",
+      "target_page": "Engineering Onboarding",
+      "content": "New hire setup checklist v3 draft. 1) laptop is pre-enrolled in MDM, just log in w/ SSO. 2) run `make bootstrap` in the monorepo - replaces the old setup.sh which is deprecated. 3) request access to: GitHub org, Grafana, PagerDuty (only after week 2), staging AWS (read only). 4) first PR should be adding yourself to TEAM.md. 5) shadow on-call for 1 rotation before joining the primary schedule. buddy program: every new eng gets a buddy for 30 days, assigned by EM."
+    },
+    {
+      "id": "eng-2026-118",
+      "source": "slack#eng-announce",
+      "author": "Marcus Lee (Eng Manager)",
+      "date": "2026-09-25",
+      "target_page": "Engineering Onboarding",
+      "content": "FYI node 18 is dead in our stack, bootstrap now installs node 22 + python 3.12 via mise. if you onboarded before this, run `mise install` once. also staging AWS access now goes through the #access-requests bot instead of filing a ticket."
+    },
+    {
+      "id": "rel-2026-q3-01",
+      "source": "release-notes-draft",
+      "author": "Release Train",
+      "date": "2026-09-26",
+      "target_page": "Platform Release Notes Q3 2026",
+      "content": "v4.12 shipped 2026-09-24. highlights: SSO via Okta for all customer tiers (was enterprise only); new audit log export to S3; p95 API latency down 38% after moving the search service to the new cluster. fixes: CSV export timezone bug (#4411), duplicate webhook deliveries on retry (#4390). known issue: dark mode charts render wrong colors in Safari 17, fix planned for 4.12.1"
+    },
+    {
+      "id": "rel-2026-q3-02",
+      "source": "slack#release-train",
+      "author": "Release Train",
+      "date": "2026-09-29",
+      "target_page": "Platform Release Notes Q3 2026",
+      "content": "4.12.1 hotfix out today: fixes Safari dark mode charts + a rare 500 on the billing page when a coupon expired mid-session. deprecation notice: API v1 /reports endpoints will be removed in 5.0 (Q1 2027), use /v2/reports."
+    }
+  ]
+}

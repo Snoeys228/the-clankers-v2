@@ -1,0 +1,81 @@
+# =============================================================================
+# Auto-Updating Company Wiki - local MediaWiki stack
+# =============================================================================
+#
+# Services
+#   mediawiki  - Official MediaWiki image (Apache + PHP), served on localhost:8080
+#   database   - MariaDB 11.4 LTS, only reachable from inside the Docker network
+#
+# Lifecycle
+#   1. `docker compose up -d`                  -> start both containers
+#   2. Open http://localhost:8080 and run the web installer
+#      (database host = "database", credentials = values below / in .env)
+#   3. Download the generated LocalSettings.php into this folder
+#   4. Uncomment the LocalSettings.php volume line below
+#   5. `docker compose up -d` again            -> wiki is live
+#
+# All credentials can be overridden with a `.env` file next to this file
+# (see .env.example). The defaults are for local demos only.
+# =============================================================================
+
+name: company-wiki
+
+services:
+  # ---------------------------------------------------------------------------
+  # MediaWiki web application
+  # ---------------------------------------------------------------------------
+  mediawiki:
+    # Official Docker Library image, pinned to the 1.43 LTS branch
+    # (supported until late 2027). Use `mediawiki:stable` for the newest release.
+    image: mediawiki:1.43
+    container_name: company-wiki-mediawiki
+    restart: unless-stopped
+    depends_on:
+      database:
+        # Wait for MariaDB to report healthy before starting, so the web
+        # installer can connect on the first try.
+        condition: service_healthy
+    ports:
+      # host:container - Apache listens on port 80 inside the container.
+      - "${WIKI_PORT:-8080}:80"
+    volumes:
+      # Uploaded files, thumbnails and other generated assets.
+      - wiki_images:/var/www/html/images
+
+      # -----------------------------------------------------------------------
+      # AFTER completing the web installer, download LocalSettings.php into
+      # this directory and uncomment the line below, then run
+      # `docker compose up -d` again. Until then the wiki shows the installer.
+      # -----------------------------------------------------------------------
+      # - ./LocalSettings.php:/var/www/html/LocalSettings.php:ro
+
+  # ---------------------------------------------------------------------------
+  # MariaDB database
+  # ---------------------------------------------------------------------------
+  database:
+    image: mariadb:11.4
+    container_name: company-wiki-db
+    restart: unless-stopped
+    environment:
+      # These values are what you type into the MediaWiki web installer.
+      MARIADB_DATABASE: ${DB_NAME:-wikidb}
+      MARIADB_USER: ${DB_USER:-wikiuser}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-wikipass}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpass}
+    volumes:
+      # Persistent database files; survives `docker compose down`.
+      # Use `docker compose down -v` to wipe the wiki completely.
+      - db_data:/var/lib/mysql
+    healthcheck:
+      # healthcheck.sh ships with the official MariaDB image.
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    # No `ports:` section on purpose: the database is only reachable by the
+    # mediawiki container over the internal Compose network.
+
+volumes:
+  db_data:
+  wiki_images:
