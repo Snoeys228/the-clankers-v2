@@ -250,6 +250,8 @@ def synthesize_page(
         # parses the JSON reply back into a WikiPageDraft (response.parsed).
         "response_mime_type": "application/json",
         "response_schema": WikiPageDraft,
+        # No tools are used, so skip the SDK's automatic function calling loop.
+        "automatic_function_calling": types.AutomaticFunctionCallingConfig(disable=True),
     }
     if cfg.gemini_thinking_level:
         config_kwargs["thinking_config"] = types.ThinkingConfig(
@@ -382,7 +384,7 @@ class MediaWikiClient:
         )["login"]
         if result.get("result") != "Success":
             raise MediaWikiError(
-                f"Login failed for {self.username!r}: {result.get('reason', result)}. "
+                f"Login failed for {self.username!r}: {str(result.get('reason', result)).rstrip('.')}. "
                 "Create a bot password at Special:BotPasswords (see README)."
             )
 
