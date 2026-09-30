@@ -1,0 +1,14 @@
+# Python dependencies for the AutoUpdater bot (Python 3.10+).
+# Install with:  pip install -r bot/requirements.txt
+
+# HTTP client for the MediaWiki Action API (login, read pages, edit pages).
+requests>=2.32,<3
+
+# Official Google Gen AI SDK for Gemini (`from google import genai`).
+google-genai>=2.25,<3
+
+# Schema for Gemini structured output (WikiPageDraft); also a google-genai dependency.
+pydantic>=2.9,<3
+
+# Loads GEMINI_API_KEY / WIKI_* settings from bot/.env.
+python-dotenv>=1.0,<2
